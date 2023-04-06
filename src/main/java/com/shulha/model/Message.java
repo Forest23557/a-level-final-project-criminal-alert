@@ -1,6 +1,6 @@
 package com.shulha.model;
 
-import com.shulha.types.Gender;
+import com.shulha.types.EmailSubject;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -10,19 +10,15 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "persons")
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Person {
+@Table(name = "user_messages")
+public class Message {
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
-    private String login;
-    private String password;
-    @Column(name = "email_address")
-    private String emailAddress;
-    private String name;
-    private String surname;
+    @Column(name = "to_email")
+    private String toEmail;
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private EmailSubject subject;
+    private String body;
 }
