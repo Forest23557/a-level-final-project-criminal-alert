@@ -17,4 +17,9 @@ public abstract class SimpleMessageBody {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
     private String description;
+
+    @Override
+    public String toString() {
+        return String.format("%s", description);
+    }
 }
