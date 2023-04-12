@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
-    @Modifying
-    void deleteById(final String id);
 }

@@ -16,26 +16,21 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "application_users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private String id;
+public class User extends Person {
     private String login;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String name;
-    private String surname;
-    @Column(name = "email_address")
-    private String emailAddress;
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    private double rating;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private int age;
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Contact> contacts;
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Fetch(FetchMode.SUBSELECT)

@@ -1,10 +1,7 @@
 package com.shulha;
 
 import com.shulha.config.PasswordManager;
-import com.shulha.model.Message;
-import com.shulha.model.MessageForRelativesBody;
-import com.shulha.service.EmailSenderService;
-import com.shulha.types.EmailSubject;
+import com.shulha.service.EmailService;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -19,10 +16,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableEncryptableProperties
 public class CriminalAlert {
-    private final EmailSenderService emailSenderService;
+    private final EmailService emailService;
 
-    public CriminalAlert(@Autowired final EmailSenderService emailSenderService) {
-        this.emailSenderService = emailSenderService;
+    public CriminalAlert(@Autowired final EmailService emailService) {
+        this.emailService = emailService;
     }
 
     public static void main(String[] args) {
@@ -32,9 +29,7 @@ public class CriminalAlert {
 
     @EventListener(ApplicationReadyEvent.class)
     public void sendMail() {
-        emailSenderService.sendMail("example@gmail.com",
-                EmailSubject.MESSAGE_TO_RELATIVES.toString(),
-                "Hi!",
-                "example.com");
+//        emailSenderService.sendMail(new Message(),
+//                "example@gmail.com");
     }
 }
