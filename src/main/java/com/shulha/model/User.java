@@ -17,24 +17,34 @@ import java.util.List;
 @Setter
 @Table(name = "application_users")
 public class User extends Person {
+
     private String login;
+
     private String password;
+
     @Enumerated(EnumType.STRING)
     private Role role;
+
     private double rating;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
     private int age;
+
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
+
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Fetch(FetchMode.SUBSELECT)
     private List<Contact> contacts;
+
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Fetch(FetchMode.SUBSELECT)
     private List<Address> addresses;
+
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Fetch(FetchMode.SUBSELECT)

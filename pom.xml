@@ -11,20 +11,22 @@
 	<groupId>org.a-level-onl3-shulha</groupId>
 	<artifactId>Final-Project-Criminal-Alert</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Final-Project-Criminal-Alert</name>
-	<description>Final project at A-Level that name is Criminal Alert</description>
+	<name>criminalAlert</name>
+	<description>Criminal Alert is a web application that helps you to be protected</description>
 	<properties>
 		<java.version>11</java.version>
+		<jasypt.version>3.0.5</jasypt.version>
+		<jsonwebtoken.version>0.11.2</jsonwebtoken.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-security</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -70,11 +72,17 @@
 		<dependency>
 			<groupId>com.github.ulisesbocchio</groupId>
 			<artifactId>jasypt-spring-boot-starter</artifactId>
-			<version>3.0.5</version>
+			<version>${jasypt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jsonwebtoken.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -120,7 +128,7 @@
 			<plugin>
 				<groupId>com.github.ulisesbocchio</groupId>
 				<artifactId>jasypt-maven-plugin</artifactId>
-				<version>3.0.5</version>
+				<version>${jasypt.version}</version>
 			</plugin>
 		</plugins>
 	</build>

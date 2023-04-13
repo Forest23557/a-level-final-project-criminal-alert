@@ -1,6 +1,7 @@
 package com.shulha.types;
 
 public enum CrimeTypes {
+    NONE,
     DOMESTIC_VIOLENCE,
     KIDNAPPING,
     BURGLARY,

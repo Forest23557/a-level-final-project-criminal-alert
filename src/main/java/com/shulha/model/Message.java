@@ -1,5 +1,6 @@
 package com.shulha.model;
 
+import com.shulha.types.CrimeTypes;
 import com.shulha.types.EmailSubject;
 import com.shulha.types.MessageStatus;
 import lombok.Getter;
@@ -16,20 +17,27 @@ import java.util.Objects;
 @ToString
 @Table(name = "user_messages")
 public class Message {
+
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "message_status")
     private MessageStatus messageStatus;
+
     @Column(name = "to_email")
     private String toEmail;
+
     @Enumerated(EnumType.STRING)
     private EmailSubject subject;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "body_id")
-    private SimpleMessageBody body;
+
+    @Column(name = "crime_type")
+    private CrimeTypes crimeType;
+
+    @Column(name = "body")
+    private String body;
 
     @Override
     public boolean equals(Object o) {
