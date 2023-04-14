@@ -1,7 +1,9 @@
 package com.shulha.model;
 
+import com.shulha.types.PersonStatus;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -10,30 +12,24 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "application_persons")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Person {
-    @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private String id;
+public abstract class Person extends BaseEntity {
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "surname")
     private String surname;
+
     @Column(name = "email_address")
     private String emailAddress;
+
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Objects.equals(id, person.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "person_status")
+    private PersonStatus personStatus;
 }
