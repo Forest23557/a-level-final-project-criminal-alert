@@ -28,7 +28,7 @@ public class UserController {
     @GetMapping
     public ModelAndView getUsers(final ModelAndView modelAndView) {
         modelAndView.addObject("user", userRepository.findAll());
-        modelAndView.setViewName("user");
+        modelAndView.setViewName("main");
         return modelAndView;
     }
 
@@ -38,7 +38,7 @@ public class UserController {
 
         modelAndView.addObject("user", userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Not found product with id " + id)));
-        modelAndView.setViewName("user");
+        modelAndView.setViewName("main");
 
         return modelAndView;
     }

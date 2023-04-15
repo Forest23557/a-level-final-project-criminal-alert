@@ -28,8 +28,8 @@ public class EmailController {
         message.setMessageStatus(MessageStatus.ALLOWED);
         message.setBody("Some info");
 
-        modelAndView.addObject("user", emailService.save(message));
-        modelAndView.setViewName("user");
+        modelAndView.addObject("mail", emailService.save(message));
+        modelAndView.setViewName("main");
         System.out.println(message);
 
         return modelAndView;
@@ -42,7 +42,7 @@ public class EmailController {
         final Message message = emailService.findById(id);
 
         modelAndView.addObject("mail", message);
-        modelAndView.setViewName("mail");
+        modelAndView.setViewName("main");
         System.out.println(message);
 
         return modelAndView;
