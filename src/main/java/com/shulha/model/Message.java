@@ -14,14 +14,9 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @Table(name = "user_messages")
-public class Message {
-
-    @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private String id;
+public class Message extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "message_status")
@@ -33,22 +28,10 @@ public class Message {
     @Enumerated(EnumType.STRING)
     private EmailSubject subject;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "crime_type")
     private CrimeTypes crimeType;
 
     @Column(name = "body")
     private String body;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Message message = (Message) o;
-        return Objects.equals(id, message.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en"
-    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -9,41 +9,44 @@
     <title>Criminal Alert</title>
     <link th:href="@{/css/zeroing.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet">
-    <script defer th:href="@{/js/main.js}"></script>
+    <link th:href="@{/css/header-footer.css}" rel="stylesheet">
 </head>
 
 <body>
     <header class="header">
         <nav class="navigation">
             <div class="logo-container">
-                <a class="logo-ref" th:href="@{/main.html}">
+                <a class="logo-ref" th:href="@{/}">
                     <img class="logo-image" th:src="@{/images/criminalAlertLogo.png}" alt="logo-criminal-alert">
                     <strong>Criminal Alert</strong>
                 </a>
             </div>
             <ul class="menu">
+                <li class="menu-list" id="menu-home">
+                    <a class="menu-list-ref" th:href="@{/}">Home</a>
+                </li>
                 <li class="menu-list" id="menu-crimes">
-                    <a class="menu-list-ref" href="#">Crimes</a>
+                    <a class="menu-list-ref" th:href="@{/}">Crimes</a>
                 </li>
-                <li class="menu-list" id="menu-mails">
-                    <a class="menu-list-ref" href="#">Mails</a>
+                <li class="menu-list" id="menu-mails" sec:authorize="isAuthenticated()">
+                    <a class="menu-list-ref" th:href="@{/}">Mails</a>
                 </li>
-                <li class="menu-list" id="menu-contacts">
-                    <a class="menu-list-ref" href="#">Contacts</a>
+                <li class="menu-list" id="menu-contacts" sec:authorize="isAuthenticated()">
+                    <a class="menu-list-ref" th:href="@{/}">Contacts</a>
                 </li>
-                <li class="menu-list" id="menu-addresses">
-                    <a class="menu-list-ref" href="#">Addresses</a>
+                <li class="menu-list" id="menu-addresses" sec:authorize="isAuthenticated()">
+                    <a class="menu-list-ref" th:href="@{/}">Addresses</a>
                 </li>
-                <li class="menu-list" id="menu-sign-up">
-                    <a class="menu-list-ref" href="#">Sign up</a>
+                <li class="menu-list" id="menu-sign-up" sec:authorize="!isAuthenticated()">
+                    <a class="menu-list-ref" th:href="@{/}">Sign up</a>
                 </li>
-                <li class="menu-list" id="menu-sign-in">
-                    <button type="button" id="sign-in-button-nav-bar">Sign in</button>
+                <li class="menu-list" id="menu-sign-in" sec:authorize="!isAuthenticated()">
+                    <a id="sign-in-button-nav-bar" th:href="@{/sign-in}">Sign in</a>
                 </li>
-                <li class="menu-list" id="menu-sign-out">
-                    <a class="menu-list-ref" href="#">Sign out</a>
+                <li class="menu-list" id="menu-sign-out" sec:authorize="isAuthenticated()">
+                    <a class="menu-list-ref" th:href="@{/logout}">Sign out</a>
                 </li>
-                <li class="menu-list" id="menu-account">
+                <li class="menu-list" id="menu-account" sec:authorize="isAuthenticated()">
                     <a class="menu-list-ref" href="#">Account</a>
                 </li>
             </ul>
@@ -51,16 +54,6 @@
     </header>
     <main class="main-container">
         <section class="main-section-1">
-            <div class="sign-in-container">
-                <form class="sign-in-form" action="POST">
-                    <label for="username">Username</label>
-                    <input id="username" type="text">
-                    <label for="password">Password</label>
-                    <input id="password" type="password">
-                    <button id="sign-in-button" type="submit">Sign in</button>
-                </form>
-                <p class="sign-up-ref-form">Don't have an account? <a href="#">Sign up</a></p>
-            </div>
             <div id="danger-image">
             </div>
         </section>

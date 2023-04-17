@@ -47,4 +47,19 @@ public class EmailController {
 
         return modelAndView;
     }
+
+    @GetMapping("user/{id}")
+    public ModelAndView findByUserId(@PathVariable final String id, final ModelAndView modelAndView) {
+        emailService.deleteByUserId(id);
+        final Iterable<Message> messages = emailService.findByUserId(id);
+        System.out.println(messages);
+
+        for (Message message : messages) {
+            modelAndView.addObject("mail", message);
+            modelAndView.setViewName("main");
+            System.out.println(message);
+        }
+
+        return modelAndView;
+    }
 }

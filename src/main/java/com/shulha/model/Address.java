@@ -1,10 +1,9 @@
 package com.shulha.model;
 
-import com.shulha.types.Country;
-import com.shulha.types.Region;
+import com.shulha.types.AddressStatus;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -12,18 +11,18 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "user_addresses")
-public class Address {
-
-    @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private String id;
+@ToString(callSuper = true)
+public class Address extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
-    private Country country;
+    @Column(name = "address_status")
+    private AddressStatus addressStatus;
 
-    @Enumerated(EnumType.STRING)
-    private Region region;
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "region")
+    private String region;
 
     @Column(name = "city_or_town")
     private String cityOrTown;

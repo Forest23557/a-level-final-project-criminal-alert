@@ -12,7 +12,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @Table(name = "application_persons")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person extends BaseEntity {

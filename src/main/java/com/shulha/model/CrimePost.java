@@ -1,6 +1,7 @@
 package com.shulha.model;
 
 import com.shulha.types.CrimeTypes;
+import com.shulha.types.PostStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,12 +11,17 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(callSuper = true)
 @Table(name = "crime_posts")
 public class CrimePost extends BaseEntity {
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "crime_type")
     private CrimeTypes crimeType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "post_status")
+    private PostStatus postStatus;
 
     @Column(name = "header")
     private String header;

@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @Table(name = "user_contacts")
 public class Contact extends Person {
     @Enumerated(EnumType.STRING)

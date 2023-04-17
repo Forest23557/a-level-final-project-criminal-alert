@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class EmailService {
@@ -47,19 +48,42 @@ public class EmailService {
 
     public Message save(@NonNull final Message message) {
         Objects.requireNonNull(message);
-        return emailRepository.save(message);
+        final Message savedMessage = emailRepository.save(message);
+        LOGGER.info("Message with ID: {} was saved successfully!", savedMessage.getId());
+        return savedMessage;
     }
 
     public void deleteById(@NonNull final String id) {
-        emailRepository.markAsDeletedById(MessageStatus.DELETED, id);
+        emailRepository.changeMessageStatusById(MessageStatus.DELETED, id);
+        LOGGER.info("Message with ID: {} was removed successfully!", id);
+    }
+
+    public void deleteByUserId(@NonNull final String userId) {
+        emailRepository.changeMessageStatusByUserId(MessageStatus.DELETED, userId);
+        LOGGER.info("User messages whose ID: {} were removed successfully!", userId);
     }
 
     public Message findById(@NonNull final String id) {
-        return emailRepository.findById(id)
+        final Optional<Message> message = emailRepository.findById(id);
+
+        message.ifPresentOrElse(
+                id1 -> LOGGER.info("Message with ID: {} was found successfully!", id1),
+                () -> LOGGER.info("Message with ID: {} is not found!", id)
+        );
+
+        return message
                 .orElseThrow(() -> new IllegalStateException("Email with ID: " + id + " is not found!"));
     }
 
     public Iterable<Message> findAll() {
-        return emailRepository.findAll();
+        final Iterable<Message> messages = emailRepository.findAll();
+        LOGGER.info("All messages were received!");
+        return messages;
+    }
+
+    public Iterable<Message> findByUserId(@NonNull final String userId) {
+        final Iterable<Message> messages = emailRepository.findByUserId(userId);
+        LOGGER.info("All user messages whose ID: {} were received!", userId);
+        return messages;
     }
 }
