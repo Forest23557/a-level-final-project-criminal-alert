@@ -27,60 +27,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ModelAndView create(@ModelAttribute final User user, final ModelAndView modelAndView) {
-//        userService.save(user);
-
+    @GetMapping("/sign-up")
+    public ModelAndView getSignUpForm(final ModelAndView modelAndView) {
+        modelAndView.addObject("user", new User());
+        modelAndView.setViewName("sign-up");
         return modelAndView;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping
-    public ModelAndView getUser(final ModelAndView modelAndView, Principal principal,
-                                Authentication authentication) {
-        System.out.println(authentication.getName());
-        System.out.println(principal.getName());
+    @PostMapping("/sign-up")
+    public ModelAndView setUser(@ModelAttribute final User user,  final ModelAndView modelAndView) {
+        userService.save(user);
 
-        final User user = new User();
-        user.setAge(5);
-        user.setGender(Gender.MALE);
-        user.setPassword("agagashg");
-        user.setName("sagsgs");
-        user.setUsername("Gasdg");
-        user.setRating(5);
-        user.setRole(Role.USER);
-        user.setEmailAddress("fsadggas@gasg.ag");
-        user.setMessages(new ArrayList<>());
-        final Message message = new Message();
-        message.setToEmail("agasg");
-        message.setCrimeType(CrimeTypes.ARSON);
-        message.setMessageStatus(MessageStatus.ALLOWED);
-        message.setSubject(EmailSubject.MESSAGE_TO_RELATIVES);
-        message.setBody("aghsdhf");
-        final Message message1 = new Message();
-        message1.setToEmail("agasg");
-        message1.setCrimeType(CrimeTypes.ARSON);
-        message1.setMessageStatus(MessageStatus.ALLOWED);
-        message1.setSubject(EmailSubject.MESSAGE_TO_RELATIVES);
-        message1.setBody("aghsdhf");
-        user.getMessages().add(message);
-        user.getMessages().add(message1);
-//        userService.save(user);
-        final UserDetails userDetails = userService.loadUserByUsername(principal.getName());
-//        modelAndView.addObject("password", userDetails.getPassword());
-        modelAndView.setViewName("main");
-        System.out.println(user);
-        return modelAndView;
-    }
-
-    @GetMapping("/{id}")
-    public ModelAndView getUser(@PathVariable final String id, final ModelAndView modelAndView) {
-        Objects.requireNonNull(id);
-
-//        modelAndView.addObject("user", userService.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Not found product with id " + id)));
-        modelAndView.setViewName("main");
-
+        modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
 }

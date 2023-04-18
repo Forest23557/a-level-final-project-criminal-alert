@@ -3,6 +3,7 @@ package com.shulha.service;
 import com.shulha.model.User;
 import com.shulha.repository.UserRepository;
 import com.shulha.types.PersonStatus;
+import com.shulha.types.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,10 @@ public class UserService implements UserDetailsService {
         if (userRepository.findUserByEmailAddressOrUsername(user.getEmailAddress(), user.getUsername()).isPresent()) {
             throw new IllegalArgumentException("User already exists");
         }
+
+        user.setRole(Role.USER);
+        user.setRating(10);
+        user.setPersonStatus(PersonStatus.ACTIVE);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

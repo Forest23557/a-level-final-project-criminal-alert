@@ -1,6 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criminal Alert</title>
     <link th:href="@{/css/zeroing.css}" rel="stylesheet">
-    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/sign-up.css}" rel="stylesheet">
     <link th:href="@{/css/header-footer.css}" rel="stylesheet">
 </head>
 
@@ -54,6 +54,45 @@
     </header>
     <main class="main-container">
         <section class="main-section-1">
+            <div class="sign-up-container">
+                <form class="sign-up-form" autocomplete="off" th:action="@{/user/sign-up}" th:object="${user}" method="POST">
+                    <fieldset>
+                        <label for="name">Name</label>
+                        <input placeholder="Name" pattern="[A-ZА-ЯЁa-zа-яё]{2,}" id="name" th:field="*{name}"
+                            title="name" name="name" type="text" autofocus="true" required>
+                        <label for="surname">Surname</label>
+                        <input placeholder="Surname" pattern="[A-ZА-ЯЁa-zа-яё]{2,}" id="surname" th:field="*{surname}"
+                            title="surname" name="surname" type="text" required>
+                        <label for="username">Username</label>
+                        <input placeholder="Username" pattern="[A-Za-z0-9]{2,}" id="username" th:field="*{username}"
+                            title="username" name="username" type="text" required>
+                        <label for="password">Password</label>
+                        <input placeholder="At least 8 characters" pattern="[A-Za-z0-9.+-]{8,}" id="password"
+                            th:field="*{password}" title="password" name="password" type="password" required>
+                        <label for="email-address">Email address</label>
+                        <input placeholder="example@mail.com" pattern="[A-Za-z0-9.+-]+@[A-Za-z0-9 -]+\.[a-z]{2,}"
+                            id="email-address" th:field="*{emailAddress}" title="email address" name="email-address"
+                            type="email" required>
+                        <label for="phone-number">Phone number</label>
+                        <input placeholder="099-999-9999"
+                            pattern="((\+\d{1,2})[ -])?\(?(?<PartOfPhone>\d{3})\)?[ -]?(\d{3})[ -]?(\d{4})"
+                            id="phone-number" th:field="*{phoneNumber}" title="phone number" name="phone-number"
+                            type="tel">
+                        <label for="gender">Gender</label>
+                        <select name="gender" id="gender" title="gender">
+                            <option th:each="genderOpt : ${T(com.shulha.types.Gender).values()}" th:value="${genderOpt}"
+                                th:text="${genderOpt}"></option>
+                        </select>
+                        <label for="age">Age</label>
+                        <input placeholder="Example: 18" pattern="[0-9]{1,}" id="age" th:field="*{age}" title="age"
+                            name="age" type="number">
+                        <label for="date-of-birth">Date of birth</label>
+                        <input id="date-of-birth" th:field="*{dateOfBirth}" title="date of birth" name="date-of-birth"
+                            type="date">
+                        <button id="sign-up-button" name="submit" type="submit" value="submit">Sign up</button>
+                    </fieldset>
+                </form>
+            </div>
             <div id="danger-image">
             </div>
         </section>

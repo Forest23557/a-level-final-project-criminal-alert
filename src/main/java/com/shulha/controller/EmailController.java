@@ -20,46 +20,4 @@ public class EmailController {
     public EmailController(final EmailService emailService) {
         this.emailService = emailService;
     }
-
-    @GetMapping
-    public ModelAndView save(final ModelAndView modelAndView) {
-        final Message message = new Message();
-
-        message.setMessageStatus(MessageStatus.ALLOWED);
-        message.setBody("Some info");
-
-        modelAndView.addObject("mail", emailService.save(message));
-        modelAndView.setViewName("main");
-        System.out.println(message);
-
-        return modelAndView;
-    }
-
-    @GetMapping("/{id}")
-    public ModelAndView delete(@PathVariable final String id, final ModelAndView modelAndView) {
-        emailService.deleteById(id);
-
-        final Message message = emailService.findById(id);
-
-        modelAndView.addObject("mail", message);
-        modelAndView.setViewName("main");
-        System.out.println(message);
-
-        return modelAndView;
-    }
-
-    @GetMapping("user/{id}")
-    public ModelAndView findByUserId(@PathVariable final String id, final ModelAndView modelAndView) {
-        emailService.deleteByUserId(id);
-        final Iterable<Message> messages = emailService.findByUserId(id);
-        System.out.println(messages);
-
-        for (Message message : messages) {
-            modelAndView.addObject("mail", message);
-            modelAndView.setViewName("main");
-            System.out.println(message);
-        }
-
-        return modelAndView;
-    }
 }

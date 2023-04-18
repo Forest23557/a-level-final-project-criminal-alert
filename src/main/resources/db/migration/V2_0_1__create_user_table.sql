@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "application_users" (
 "password" text not null,
 "gender" varchar(255),
 "role" varchar(255) not null,
-"date_of_birth" date,
+"date_of_birth" timestamp without time zone,
 "age" integer,
 "rating" double precision,
 foreign key ("id")

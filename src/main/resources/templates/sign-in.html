@@ -38,7 +38,7 @@
                 <a class="menu-list-ref" th:href="@{/}">Addresses</a>
             </li>
             <li class="menu-list" id="menu-sign-up" sec:authorize="!isAuthenticated()">
-                <a class="menu-list-ref" th:href="@{/}">Sign up</a>
+                <a class="menu-list-ref" th:href="@{/user/sign-up}">Sign up</a>
             </li>
             <li class="menu-list" id="menu-sign-in" sec:authorize="!isAuthenticated()">
                 <a id="sign-in-button-nav-bar" th:href="@{/sign-in}">Sign in</a>
@@ -47,7 +47,7 @@
                 <a class="menu-list-ref" th:href="@{/logout}">Sign out</a>
             </li>
             <li class="menu-list" id="menu-account" sec:authorize="isAuthenticated()">
-                <a class="menu-list-ref" href="#">Account</a>
+                <a class="menu-list-ref" th:href="@{/}" th:text="${name}"></a>
             </li>
         </ul>
     </nav>
@@ -64,7 +64,7 @@
                     <button id="sign-in-button" name="submit" type="submit" value="submit">Sign in</button>
                 </fieldset>
             </form>
-            <p class="sign-up-ref-form">Don't have an account? <a href="#">Sign up</a></p>
+            <p class="sign-up-ref-form">Don't have an account? <a th:href="@{/}">Sign up</a></p>
         </div>
         <div id="danger-image">
         </div>

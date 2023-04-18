@@ -27,7 +27,10 @@ public class SignInController {
     }
 
     @GetMapping
-    public String getHome() {
-        return "main";
+    public ModelAndView getHome(final ModelAndView modelAndView, final Principal principal,
+                          final Authentication authentication) {
+        modelAndView.addObject("name", authentication.getName());
+        modelAndView.setViewName("main");
+        return modelAndView;
     }
 }

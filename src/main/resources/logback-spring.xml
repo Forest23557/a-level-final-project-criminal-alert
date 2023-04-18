@@ -32,7 +32,7 @@
     <logger name="com.shulha" level="info">
     </logger>
 
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="FILE-ROLLING"/>
         <appender-ref ref="STDOUT" />
     </root>
