@@ -1,0 +1,114 @@
+main.main-container {
+	position: relative;
+	width: 100%;
+	min-height: calc(100vh - 208px);
+	background-color: hsl(0, 0%, 8%);
+	padding-bottom: 5rem;
+}
+
+#danger-image {
+	width: 100%;
+	min-height: calc(100vh - 208px);
+	background: url("../images/boat-danger.jpg") 50%/cover no-repeat;
+	opacity: 0.15;
+}
+
+section.main-section-1 {
+	width: 100%;
+	padding: 1.5rem;
+}
+
+a.message-container {
+	display: grid;
+	gap: 1rem;
+
+	grid-template-areas:
+    "A A A A   B B B B   C C C C 	H H H H"
+    "D D D D   E E E E   F F F F 	H H H H"
+	 "G G G G   G G G G   G G G G 	H H H H";
+
+	padding: 1rem;
+	border: 1px solid hsl(0, 0%, 75%);
+	border-radius: 1rem;
+	background-color: hsl(0, 0%, 8%);
+	color: hsl(0, 0%, 75%);
+	transition: all 100ms ease-in;
+	margin-bottom: 1rem;
+	cursor: pointer;
+}
+
+.message-id-head {
+	grid-area: A;
+}
+
+.message-created-head {
+	grid-area: B;
+}
+
+.message-updated-head {
+	grid-area: C;
+}
+
+.message-status-head {
+	grid-area: D;
+}
+
+.message-receiver-head {
+	grid-area: E;
+}
+
+.message-subject-head {
+	grid-area: F;
+}
+
+.message-crime-type-head {
+	grid-area: G;
+}
+
+.message-body-head {
+	grid-area: H;
+}
+
+a.message-container:visited {
+	color: hsl(0, 0%, 75%);
+}
+
+a.message-container:hover {
+	background-color: hsl(0, 0%, 10%);
+	scale: 1.005;
+}
+
+a.message-container:active {
+	background-color: hsl(0, 0%, 12%);
+	scale: 1.005;
+}
+
+a#create-message-button {
+	width: 3rem;
+	height: 3rem;
+	position: absolute;
+	border: 1px solid hsl(0, 0%, 75%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	bottom: 1rem;
+	right: 2rem;
+	transition: all 100ms ease-in;
+}
+
+a#create-message-button:visited {
+	color: hsl(0, 0%, 75%);
+}
+
+a#create-message-button:hover {
+	background-color: hsl(0, 0%, 10%);
+}
+
+a#create-message-button:active {
+	background-color: hsl(0, 0%, 12%);
+}
+
+a {
+	cursor: pointer;
+}

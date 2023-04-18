@@ -34,7 +34,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/").authenticated()
+                .antMatchers("/*").authenticated()
+//                .antMatchers("/").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
@@ -43,7 +44,10 @@ public class SecurityConfiguration {
                 .and()
                 .rememberMe()
                 .and()
-                .logout().permitAll()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/sign-in")
+                .permitAll()
                 .invalidateHttpSession(true)
                 .and()
                 .csrf().disable();

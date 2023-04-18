@@ -20,15 +20,13 @@ public class SignInController {
     }
 
     @PostMapping("sign-in")
-    public ModelAndView signIn(final ModelAndView modelAndView, final Principal principal,
-                         final Authentication authentication) {
+    public ModelAndView signIn(final ModelAndView modelAndView) {
         modelAndView.setViewName("main");
         return modelAndView;
     }
 
     @GetMapping
-    public ModelAndView getHome(final ModelAndView modelAndView, final Principal principal,
-                          final Authentication authentication) {
+    public ModelAndView getHome(final ModelAndView modelAndView, final Authentication authentication) {
         modelAndView.addObject("name", authentication.getName());
         modelAndView.setViewName("main");
         return modelAndView;

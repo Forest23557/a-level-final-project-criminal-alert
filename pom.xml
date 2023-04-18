@@ -17,6 +17,7 @@
 		<java.version>11</java.version>
 		<jasypt.version>3.0.5</jasypt.version>
 		<jsonwebtoken.version>0.11.2</jsonwebtoken.version>
+		<spring.data.commons.version>2.7.10</spring.data.commons.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -26,6 +27,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+			<version>${spring.data.commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
