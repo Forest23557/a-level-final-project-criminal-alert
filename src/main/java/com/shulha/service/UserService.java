@@ -50,6 +50,12 @@ public class UserService implements UserDetailsService {
         LOGGER.info("User with ID: {} was saved successfully!", savedUser.getId());
     }
 
+    public void update(@NonNull final User user) {
+        LOGGER.info("User with ID: {} before saving!", user.getId());
+        final User savedUser = userRepository.save(user);
+        LOGGER.info("User with ID: {} was saved successfully!", savedUser.getId());
+    }
+
     public User findById(@NonNull final String id) {
         final User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("User with ID: " + id + " is not found"));
@@ -72,6 +78,12 @@ public class UserService implements UserDetailsService {
     public void deleteAll() {
         userRepository.changeAllPersonStatuses(PersonStatus.DELETED);
         LOGGER.info("All users were removed!");
+    }
+
+    public User getUserByUserNameOrEmail(@NonNull final String emailAddressOrUsername) {
+        return userRepository.findUserByEmailAddressOrUsername(emailAddressOrUsername, emailAddressOrUsername)
+                .orElseThrow(() -> new UsernameNotFoundException("User with emailAddressOrUsername or email " +
+                        emailAddressOrUsername + " is not found"));
     }
 
     @Override

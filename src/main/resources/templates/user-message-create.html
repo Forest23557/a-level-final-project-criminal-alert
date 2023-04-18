@@ -30,7 +30,7 @@
 					<a class="menu-list-ref" th:href="@{/}">Crimes</a>
 				</li>
 				<li class="menu-list" id="menu-mails" sec:authorize="isAuthenticated()">
-					<a class="menu-list-ref" th:href="@{/}">Mails</a>
+					<a class="menu-list-ref" th:href="@{/user/message/create}">Mails</a>
 				</li>
 				<li class="menu-list" id="menu-contacts" sec:authorize="isAuthenticated()">
 					<a class="menu-list-ref" th:href="@{/}">Contacts</a>
@@ -59,7 +59,7 @@
 	<main class="main-container">
 		<section class="main-section-1">
 			<div class="message-container">
-				<form class="message-form" id="message-form" autocomplete="off" th:action="@{/}" th:object="${message}" method="POST">
+				<form class="message-form" id="message-form" autocomplete="off" th:action="@{/user/message/create}" th:object="${message}" method="POST">
 					<fieldset>
 						<label for="receiver">Receiver email-address</label>
 						<input placeholder="examle@mail.com" pattern="[A-Za-z0-9.+-]+@[A-Za-z0-9 -]+\.[a-z]{2,}" id="receiver"
@@ -76,7 +76,7 @@
 						</select>
 						<label for="body">Body</label>
 						<textarea th:field="*{body}" id="body" name="body" form="message-form" placeholder="Enter text here..." required></textarea>
-						<button id="sign-up-button" name="submit" type="submit" value="submit">Send</button>
+						<button id="send-button" name="submit" type="submit" value="submit">Send</button>
 					</fieldset>
 				</form>
 			</div>

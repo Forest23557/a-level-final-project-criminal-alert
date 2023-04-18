@@ -2,6 +2,8 @@ package com.shulha.service;
 
 import com.shulha.model.Message;
 import com.shulha.repository.EmailRepository;
+import com.shulha.types.CrimeTypes;
+import com.shulha.types.EmailSubject;
 import com.shulha.types.MessageStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +13,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class EmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
+    private static final String POLICE_EMAIL_ADDRESS = "forest23557@gmail.com";
 
     private final JavaMailSender mailSender;
 
@@ -30,20 +32,21 @@ public class EmailService {
         this.emailRepository = emailRepository;
     }
 
-    public void sendMail(final Message message, final String userEmail) {
-        final SimpleMailMessage mailMessage = new SimpleMailMessage();
-        final String toEmail = message.getToEmail();
-        final String subject = message.getSubject().toString();
-        final String messageBody = message.getBody();
+    public Message chooseSendOrModerate(@NonNull final Message message, @NonNull final String userEmail) {
+        final EmailSubject subject = message.getSubject();
 
-        mailMessage.setFrom(userEmail);
-        mailMessage.setTo(toEmail);
-        mailMessage.setSubject(subject);
-        mailMessage.setText(messageBody);
+        Optional.ofNullable(subject)
+                .orElseThrow(() -> new NullPointerException("Subject should not be null!"));
 
-        mailSender.send(mailMessage);
+        if (subject == EmailSubject.MESSAGE_TO_RELATIVES) {
+            message.setMessageStatus(MessageStatus.ALLOWED);
+        } else {
+            message.setMessageStatus(MessageStatus.UNMODERATED);
+            changeMessage(message);
+        }
+        sendMail(message, userEmail);
 
-        LOGGER.info("Mail {} sent successfully", message.getId());
+        return message;
     }
 
     public Message save(@NonNull final Message message) {
@@ -85,5 +88,52 @@ public class EmailService {
         final Iterable<Message> messages = emailRepository.findByUserId(userId);
         LOGGER.info("All user messages whose ID: {} were received!", userId);
         return messages;
+    }
+
+    private void sendMail(final Message message, final String userEmail) {
+        final SimpleMailMessage mailMessage = new SimpleMailMessage();
+        final String toEmail = message.getToEmail();
+        final String subject = message.getSubject().toString();
+        final String messageBody = message.getBody();
+
+        mailMessage.setFrom(userEmail);
+        mailMessage.setTo(toEmail);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(messageBody);
+
+        mailSender.send(mailMessage);
+
+        LOGGER.info("Mail {} sent successfully", message.getId());
+    }
+
+    private Message changeMessage(@NonNull final Message message) {
+        final CrimeTypes crimeType = message.getCrimeType();
+        final String body = message.getBody();
+
+        if (crimeType == null || body == null) {
+            throw new NullPointerException("Fields crimeType and body should not be null!");
+        }
+
+        final String string = String.format("Type of a crime: %s. %s", crimeType, body);
+
+        message.setToEmail(POLICE_EMAIL_ADDRESS);
+
+        message.setBody(string);
+        LOGGER.info("Message was changed successfully!");
+
+        return message;
+    }
+
+    private Message saveAndSend(@NonNull final Message message, @NonNull final String userEmail) {
+        final Message saved = save(message);
+        sendMail(saved, userEmail);
+
+        return saved;
+    }
+
+    private Message saveAndChangeMail(@NonNull final Message message) {
+        changeMessage(message);
+        final Message saved = save(message);
+        return saved;
     }
 }

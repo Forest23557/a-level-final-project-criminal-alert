@@ -7,9 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criminal Alert</title>
-    <link th:href="@{/css/zeroing.css}" rel="stylesheet">
-    <link th:href="@{/css/main.css}" rel="stylesheet">
-    <link th:href="@{/css/header-footer.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/zeroing.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/header-footer.css}">
 </head>
 
 <body>
@@ -29,7 +29,7 @@
                 <a class="menu-list-ref" th:href="@{/}">Crimes</a>
             </li>
             <li class="menu-list" id="menu-mails" sec:authorize="isAuthenticated()">
-                <a class="menu-list-ref" th:href="@{/}">Mails</a>
+                <a class="menu-list-ref" th:href="@{/user/message/create}">Mails</a>
             </li>
             <li class="menu-list" id="menu-contacts" sec:authorize="isAuthenticated()">
                 <a class="menu-list-ref" th:href="@{/}">Contacts</a>
@@ -58,6 +58,7 @@
 <main class="main-container">
     <section class="main-section-1">
         <div class="sign-in-container">
+            <p th:if="${loginError}" class="error">Wrong user or password</p>
             <form class="sign-in-form" autocomplete="off" th:action="@{/sign-in}" method="POST">
                 <fieldset>
                     <label for="username">Username</label>
@@ -67,7 +68,7 @@
                     <button id="sign-in-button" name="submit" type="submit" value="submit">Sign in</button>
                 </fieldset>
             </form>
-            <p class="sign-up-ref-form">Don't have an account? <a th:href="@{/}">Sign up</a></p>
+            <p class="sign-up-ref-form">Don't have an account? <a th:href="@{/user/sign-up}">Sign up</a></p>
         </div>
         <div id="danger-image">
         </div>

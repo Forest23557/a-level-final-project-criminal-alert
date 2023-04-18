@@ -49,7 +49,7 @@ form.message-form label {
 	font-weight: 600;
 }
 
-button#sign-up-button {
+button#send-button {
 	width: 15rem;
 	height: 2rem;
 	border-radius: .4rem;
@@ -59,11 +59,11 @@ button#sign-up-button {
 	font-weight: 500;
 }
 
-button#sign-up-button:hover {
+button#send-button:hover {
 	background-color: hsl(0, 0%, 55%);
 }
 
-button#sign-up-button:active {
+button#send-button:active {
 	background-color: hsl(0, 0%, 35%);
 }
 
