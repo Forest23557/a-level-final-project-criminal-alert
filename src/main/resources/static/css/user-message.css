@@ -112,3 +112,9 @@ a#create-message-button:active {
 a {
 	cursor: pointer;
 }
+
+.pagination {
+    display: inline-block;
+    margin-top: 2rem;
+    margin-left: 2rem;
+}

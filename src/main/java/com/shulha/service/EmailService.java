@@ -8,13 +8,21 @@ import com.shulha.types.MessageStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class EmailService {
@@ -30,6 +38,25 @@ public class EmailService {
     public EmailService(final JavaMailSender mailSender, final EmailRepository emailRepository) {
         this.mailSender = mailSender;
         this.emailRepository = emailRepository;
+    }
+
+    public Page<Message> findPaginatedMessages(final Pageable pageable, final String userId) {
+        final Iterable<Message> messages = findByUserId(userId);
+        final List<Message> messageList = StreamSupport.stream(messages.spliterator(), false)
+                        .collect(Collectors.toList());
+        final int pageSize = pageable.getPageSize();
+        final int currentPage = pageable.getPageNumber();
+        final int startItem = currentPage * pageSize;
+        final List<Message> list;
+
+        if (messageList.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, messageList.size());
+            list = messageList.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<Message>(list, PageRequest.of(currentPage, pageSize), messageList.size());
     }
 
     public Message chooseSendOrModerate(@NonNull final Message message, @NonNull final String userEmail) {

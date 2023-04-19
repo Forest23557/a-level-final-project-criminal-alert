@@ -29,7 +29,7 @@
                 <a class="menu-list-ref" th:href="@{/}">Crimes</a>
             </li>
             <li class="menu-list" id="menu-mails" sec:authorize="isAuthenticated()">
-                <a class="menu-list-ref" th:href="@{/user/message/create}">Mails</a>
+                <a class="menu-list-ref" th:href="@{/user/message}">Mails</a>
             </li>
             <li class="menu-list" id="menu-contacts" sec:authorize="isAuthenticated()">
                 <a class="menu-list-ref" th:href="@{/}">Contacts</a>
@@ -57,43 +57,49 @@
 </header>
 <main class="main-container">
     <section class="main-section-1">
-        <a th:href="/" class="message-container">
+        <a th:each="message : ${messagePage.content}" th:href="@{/}" class="message-container">
             <div class="message-id-head" name="message-id-head" title="header of a message id">
                 <span>ID: </span>
-                <span class="message-id" name="message-id">52665909-0d85-4714-bb13-4d3c8b11204c</span>
+                <span th:text="${message.id}" class="message-id" name="message-id"></span>
             </div>
             <div class="message-created-head" name="message-created-head" title="header of a message created">
                 <span>Created: </span>
-                <span class="message-created" name="message-created">02-05-2000 18:05:56</span>
+                <span th:text="${#temporals.format(message.created, 'dd-MM-yyyy HH:mm')}" class="message-created" name="message-created"></span>
             </div>
             <div class="message-updated-head" name="message-updated-head" title="header of a message updated">
                 <span>Updated: </span> 
-                <span class="message-updated" name="message-updated">02-05-2000 18:05:56</span>
+                <span th:text="${#temporals.format(message.updated, 'dd-MM-yyyy HH:mm')}" class="message-updated" name="message-updated"></span>
             </div>
             <div class="message-status-head" name="message-status-head" title="header of a message status">
                 <span>Message status: </span>
-                <span class="message-status" name="message-status">UNMODERATED</span>
+                <span th:text="${message.messageStatus}" class="message-status" name="message-status"></span>
             </div>
             <div class="message-receiver-head" name="message-receiver-head" title="header of a message receiver">
                 <span>Receiver: </span>
-                <span class="message-receiver" name="message-receiver">pet227@gmail.com</span>
+                <span th:text="${message.toEmail}" class="message-receiver" name="message-receiver"></span>
             </div>
             <div class="message-subject-head" name="message-subject-head" title="header of a message subject">
                 <span>Subject: </span>
-                <span class="message-subject" name="message-subject">Message to relatives</span>
+                <span th:text="${message.subject}" class="message-subject" name="message-subject"></span>
             </div>
             <div class="message-crime-type-head" name="message-crime-type-head" title="header of a message crime type">
                 <span>Crime type: </span>
-                <span class="message-crime-type" name="message-crime-type">DOMESTIC_VIOLENCE</span>
+                <span th:text="${message.crimeType}" class="message-crime-type" name="message-crime-type"></span>
             </div>
             <div class="message-body-head" name="message-body-head" title="header of a message body">
                 <span>Message: "</span>
-                <span class="message-body-type" name="message-body-type">I have just seen a crime.</span>
+                <span th:text="${message.body}" class="message-body-type" name="message-body-type"></span>
                 <span>"</span>
             </div>
         </a>
     </section>
-    <a id="create-message-button" href="">+</a>
+    <div th:if="${messagePage.totalPages > 0}" class="pagination"
+         th:each="pageNumber : ${pageNumbers}">
+        <a th:href="@{/user/message(size=${messagePage.size}, page=${pageNumber})}"
+           th:text=${pageNumber}
+           th:class="${pageNumber==messagePage.number + 1} ? active"></a>
+    </div>
+    <a id="create-message-button" th:href="@{/user/message/create}">+</a>
 </main>
 <footer class="footer">
     <section class="footer-section-1">

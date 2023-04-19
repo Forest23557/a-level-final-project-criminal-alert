@@ -30,7 +30,7 @@
 					<a class="menu-list-ref" th:href="@{/}">Crimes</a>
 				</li>
 				<li class="menu-list" id="menu-mails" sec:authorize="isAuthenticated()">
-					<a class="menu-list-ref" th:href="@{/user/message/create}">Mails</a>
+					<a class="menu-list-ref" th:href="@{/user/message}">Mails</a>
 				</li>
 				<li class="menu-list" id="menu-contacts" sec:authorize="isAuthenticated()">
 					<a class="menu-list-ref" th:href="@{/}">Contacts</a>
@@ -69,8 +69,8 @@
 							<option th:each="subjectOpt : ${T(com.shulha.types.EmailSubject).values()}"
 								th:value="${subjectOpt}" th:text="${subjectOpt}"></option>
 						</select>
-						<label for="crime-type">Type of a crime</label>
-						<select name="crime-type" id="crime-type" title="crime-type">
+						<label for="crimeType">Type of a crime</label>
+						<select name="crimeType" id="crimeType" title="crime type">
 							<option th:each="crimeTypeOpt : ${T(com.shulha.types.CrimeTypes).values()}"
 								th:value="${crimeTypeOpt}" th:text="${crimeTypeOpt}"></option>
 						</select>
