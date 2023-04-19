@@ -75,11 +75,8 @@ public class UserController {
                                        @RequestParam("page") Optional<Integer> page,
                                        @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
-        System.out.println(currentPage);
         int pageSize = size.orElse(5);
-        System.out.println(pageSize);
         final User user = userService.getUserByUserNameOrEmail(authentication.getName());
-        System.out.println(user.getId());
         final Page<Message> paginatedMessages =
                 emailService.findPaginatedMessages(PageRequest.of(currentPage - 1, pageSize), user.getId());
 
@@ -91,7 +88,6 @@ public class UserController {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                     .boxed()
                     .collect(Collectors.toList());
-            System.out.println(pageNumbers);
             modelAndView.addObject("pageNumbers", pageNumbers);
         }
 

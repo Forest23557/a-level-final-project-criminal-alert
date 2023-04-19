@@ -40,23 +40,24 @@ public class EmailService {
         this.emailRepository = emailRepository;
     }
 
-    public Page<Message> findPaginatedMessages(final Pageable pageable, final String userId) {
+    public Message updateAndSendMessageForAdmin(final Message message, final String adminEmail) {
+        update(message);
+        sendMail(message, adminEmail);
+        return message;
+    }
+
+    public Page<Message> findPaginatedMessages(@NonNull final Pageable pageable, @NonNull final String userId) {
         final Iterable<Message> messages = findByUserId(userId);
         final List<Message> messageList = StreamSupport.stream(messages.spliterator(), false)
-                        .collect(Collectors.toList());
-        final int pageSize = pageable.getPageSize();
-        final int currentPage = pageable.getPageNumber();
-        final int startItem = currentPage * pageSize;
-        final List<Message> list;
+                .collect(Collectors.toList());
+        return findPaginated(pageable, messageList);
+    }
 
-        if (messageList.size() < startItem) {
-            list = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, messageList.size());
-            list = messageList.subList(startItem, toIndex);
-        }
-
-        return new PageImpl<Message>(list, PageRequest.of(currentPage, pageSize), messageList.size());
+    public Page<Message> findPaginatedMessagesForAdmin(@NonNull final Pageable pageable) {
+        final Iterable<Message> messages = emailRepository.findByMessageStatus(MessageStatus.UNMODERATED);
+        final List<Message> messageList = StreamSupport.stream(messages.spliterator(), false)
+                .collect(Collectors.toList());
+        return findPaginated(pageable, messageList);
     }
 
     public Message chooseSendOrModerate(@NonNull final Message message, @NonNull final String userEmail) {
@@ -67,17 +68,22 @@ public class EmailService {
 
         if (subject == EmailSubject.MESSAGE_TO_RELATIVES) {
             message.setMessageStatus(MessageStatus.ALLOWED);
+            sendMail(message, userEmail);
         } else {
             message.setMessageStatus(MessageStatus.UNMODERATED);
             changeMessage(message);
         }
-        sendMail(message, userEmail);
 
         return message;
     }
 
     public Message save(@NonNull final Message message) {
-        Objects.requireNonNull(message);
+        final String id = message.getId();
+
+        if (id != null) {
+            throw new IllegalStateException("Message with ID: " + id + " already exists!");
+        }
+
         final Message savedMessage = emailRepository.save(message);
         LOGGER.info("Message with ID: {} was saved successfully!", savedMessage.getId());
         return savedMessage;
@@ -115,6 +121,22 @@ public class EmailService {
         final Iterable<Message> messages = emailRepository.findByUserId(userId);
         LOGGER.info("All user messages whose ID: {} were received!", userId);
         return messages;
+    }
+
+    private Page<Message> findPaginated(final Pageable pageable, List<Message> messageList) {
+        final int pageSize = pageable.getPageSize();
+        final int currentPage = pageable.getPageNumber();
+        final int startItem = currentPage * pageSize;
+        final List<Message> list;
+
+        if (messageList.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, messageList.size());
+            list = messageList.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<Message>(list, PageRequest.of(currentPage, pageSize), messageList.size());
     }
 
     private void sendMail(final Message message, final String userEmail) {
@@ -162,5 +184,9 @@ public class EmailService {
         changeMessage(message);
         final Message saved = save(message);
         return saved;
+    }
+
+    private void update(@NonNull final Message message) {
+        emailRepository.save(message);
     }
 }

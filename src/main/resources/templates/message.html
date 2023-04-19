@@ -7,9 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criminal Alert</title>
-    <link rel="stylesheet" th:href="@{/css/zeroing.css}">
-    <link rel="stylesheet" th:href="@{/css/main.css}">
-    <link rel="stylesheet" th:href="@{/css/header-footer.css}">
+    <link th:href="@{/css/zeroing.css}" href="../static/css/zeroing.css" rel="stylesheet">
+    <link th:href="@{/css/message.css}" href="../static/css/user-message.css" rel="stylesheet">
+    <link th:href="@{/css/header-footer.css}" href="../static/css/header-footer.css" rel="stylesheet">
 </head>
 
 <body>
@@ -17,7 +17,7 @@
     <nav class="navigation">
         <div class="logo-container">
             <a class="logo-ref" th:href="@{/}">
-                <img class="logo-image" th:src="@{/images/criminalAlertLogo.png}" alt="logo-criminal-alert">
+                <img class="logo-image" th:src="@{/images/criminalAlertLogo.png}" src="../static/images/criminalAlertLogo.png" alt="logo-criminal-alert">
                 <strong>Criminal Alert</strong>
             </a>
         </div>
@@ -57,22 +57,48 @@
 </header>
 <main class="main-container">
     <section class="main-section-1">
-        <div class="sign-in-container">
-            <p th:if="${loginError}" class="error">Wrong user or password</p>
-            <form class="sign-in-form" autocomplete="off" th:action="@{/sign-in}" method="POST">
-                <fieldset>
-                    <label for="username">Username</label>
-                    <input id="username" name="username" type="text" autofocus="true" required>
-                    <label for="password">Password</label>
-                    <input id="password" name="password" type="password" required>
-                    <button id="sign-in-button" name="submit" type="submit" value="submit">Sign in</button>
-                </fieldset>
-            </form>
-            <p class="sign-up-ref-form">Don't have an account? <a th:href="@{/user/sign-up}">Sign up</a></p>
-        </div>
-        <div id="danger-image">
-        </div>
+        <a th:each="message : ${messagePage.content}" th:href="@{/}" class="message-container">
+            <div class="message-id-head" name="message-id-head" title="header of a message id">
+                <span>ID: </span>
+                <span th:text="${message.id}" class="message-id" name="message-id"></span>
+            </div>
+            <div class="message-created-head" name="message-created-head" title="header of a message created">
+                <span>Created: </span>
+                <span th:text="${#temporals.format(message.created, 'dd-MM-yyyy HH:mm')}" class="message-created" name="message-created"></span>
+            </div>
+            <div class="message-updated-head" name="message-updated-head" title="header of a message updated">
+                <span>Updated: </span>
+                <span th:text="${#temporals.format(message.updated, 'dd-MM-yyyy HH:mm')}" class="message-updated" name="message-updated"></span>
+            </div>
+            <div class="message-status-head" name="message-status-head" title="header of a message status">
+                <span>Message status: </span>
+                <span th:text="${message.messageStatus}" class="message-status" name="message-status"></span>
+            </div>
+            <div class="message-receiver-head" name="message-receiver-head" title="header of a message receiver">
+                <span>Receiver: </span>
+                <span th:text="${message.toEmail}" class="message-receiver" name="message-receiver"></span>
+            </div>
+            <div class="message-subject-head" name="message-subject-head" title="header of a message subject">
+                <span>Subject: </span>
+                <span th:text="${message.subject}" class="message-subject" name="message-subject"></span>
+            </div>
+            <div class="message-crime-type-head" name="message-crime-type-head" title="header of a message crime type">
+                <span>Crime type: </span>
+                <span th:text="${message.crimeType}" class="message-crime-type" name="message-crime-type"></span>
+            </div>
+            <div class="message-body-head" name="message-body-head" title="header of a message body">
+                <span>Message: "</span>
+                <span th:text="${message.body}" class="message-body-type" name="message-body-type"></span>
+                <span>"</span>
+            </div>
+        </a>
     </section>
+    <div th:if="${messagePage.totalPages > 0}" class="pagination"
+         th:each="pageNumber : ${pageNumbers}">
+        <a th:href="@{/message(size=${messagePage.size}, page=${pageNumber})}"
+           th:text=${pageNumber}
+           th:class="${pageNumber==messagePage.number + 1} ? active"></a>
+    </div>
 </main>
 <footer class="footer">
     <section class="footer-section-1">

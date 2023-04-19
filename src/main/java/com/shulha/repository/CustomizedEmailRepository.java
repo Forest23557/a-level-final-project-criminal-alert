@@ -17,6 +17,9 @@ public interface CustomizedEmailRepository<T, ID> {
     @Query("select m from User u inner join u.messages m where u.id = ?1")
     Iterable<T> findByUserId(final ID id);
 
+    @Query("from Message m where m.messageStatus = ?1")
+    Iterable<T> findByMessageStatus(final MessageStatus messageStatus);
+
     @Transactional
     @Modifying
     @Query("update Message m set m.messageStatus = ?1 where user_id = ?2")
