@@ -4,6 +4,8 @@ import com.shulha.model.Message;
 import com.shulha.model.User;
 import com.shulha.service.EmailService;
 import com.shulha.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,8 @@ import java.util.stream.IntStream;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
 
     private final UserService userService;
 
@@ -41,7 +45,7 @@ public class UserController {
     @PostMapping("/sign-up")
     public ModelAndView setUser(@ModelAttribute final User user,  final ModelAndView modelAndView) {
         userService.save(user);
-
+        LOGGER.info("User with email address {} was signed up", user.getEmailAddress());
         modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
@@ -67,6 +71,7 @@ public class UserController {
         modelAndView.addObject("name", authentication.getName());
         modelAndView.addObject("message", message);
         modelAndView.setViewName("main");
+        LOGGER.info("Message with ID: {} was created", changedMessage.getId());
         return modelAndView;
     }
 

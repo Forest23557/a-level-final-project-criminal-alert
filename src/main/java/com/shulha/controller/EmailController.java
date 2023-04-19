@@ -1,5 +1,6 @@
 package com.shulha.controller;
 
+import com.shulha.dto.MessageDTO;
 import com.shulha.model.Message;
 import com.shulha.model.User;
 import com.shulha.service.EmailService;
@@ -9,10 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -32,9 +30,54 @@ public class EmailController {
     }
 
     @GetMapping
-    public ModelAndView getMessagePage(final ModelAndView modelAndView, final Authentication authentication,
+    public ModelAndView getMessagePage(final ModelAndView modelAndView,
+                                       final Authentication authentication,
                                        @RequestParam("page") Optional<Integer> page,
                                        @RequestParam("size") Optional<Integer> size) {
+
+        setPagination(modelAndView, page, size);
+
+        modelAndView.addObject("name", authentication.getName());
+        modelAndView.setViewName("message");
+        return modelAndView;
+    }
+
+    @PostMapping("/moderate")
+    public ModelAndView moderatePage(final ModelAndView modelAndView,
+                                     final Authentication authentication,
+                                     @ModelAttribute final MessageDTO messageDTO,
+                                     @RequestParam("id") Optional<String> id,
+                                     @RequestParam("page") Optional<Integer> page,
+                                     @RequestParam("size") Optional<Integer> size) {
+        System.out.println(messageDTO);
+        final String checkedId = id.orElseThrow(() -> new NullPointerException("Parameter ID should not be null!"));
+        emailService.updateAndSendMessageForAdmin(messageDTO, authentication.getName());
+
+        setPagination(modelAndView, page, size);
+
+        modelAndView.addObject("name", authentication.getName());
+        modelAndView.setViewName("message");
+        return modelAndView;
+    }
+
+    @GetMapping("/moderate")
+    public ModelAndView getMessageModeratingPage(final ModelAndView modelAndView,
+                                                 final Authentication authentication,
+                                                 @RequestParam("id") Optional<String> id) {
+        final String checkedId = id.orElseThrow(() -> new NullPointerException("Parameter ID should not be null!"));
+        final MessageDTO messageDTOById = emailService.getMessageDTOById(checkedId);
+        System.out.println(messageDTOById);
+
+        modelAndView.addObject("name", authentication.getName());
+        modelAndView.addObject("message", messageDTOById);
+        modelAndView.setViewName("message-moderate");
+        return modelAndView;
+    }
+
+    private void setPagination(final ModelAndView modelAndView,
+                               final Optional<Integer> page,
+                               final Optional<Integer> size) {
+
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(5);
         final Page<Message> paginatedMessages =
@@ -50,9 +93,5 @@ public class EmailController {
                     .collect(Collectors.toList());
             modelAndView.addObject("pageNumbers", pageNumbers);
         }
-
-        modelAndView.addObject("name", authentication.getName());
-        modelAndView.setViewName("message");
-        return modelAndView;
     }
 }

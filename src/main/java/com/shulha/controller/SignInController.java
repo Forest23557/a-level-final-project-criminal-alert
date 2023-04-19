@@ -1,6 +1,9 @@
 package com.shulha.controller;
 
+import com.shulha.service.EmailService;
 import com.shulha.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,8 @@ import java.security.Principal;
 
 @Controller
 public class SignInController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
 
     @GetMapping("sign-in")
     public String getSignInPage() {
@@ -29,6 +34,7 @@ public class SignInController {
     public ModelAndView getHome(final ModelAndView modelAndView, final Authentication authentication) {
         modelAndView.addObject("name", authentication.getName());
         modelAndView.setViewName("main");
+        LOGGER.info("{} with email {} was signed in", authentication.getAuthorities(), authentication.getName());
         return modelAndView;
     }
 }

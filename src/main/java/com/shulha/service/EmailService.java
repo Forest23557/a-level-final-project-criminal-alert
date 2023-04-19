@@ -1,5 +1,6 @@
 package com.shulha.service;
 
+import com.shulha.dto.MessageDTO;
 import com.shulha.model.Message;
 import com.shulha.repository.EmailRepository;
 import com.shulha.types.CrimeTypes;
@@ -40,10 +41,35 @@ public class EmailService {
         this.emailRepository = emailRepository;
     }
 
-    public Message updateAndSendMessageForAdmin(final Message message, final String adminEmail) {
-        update(message);
-        sendMail(message, adminEmail);
-        return message;
+    public MessageDTO getMessageDTOById(@NonNull final String id) {
+        final MessageDTO messageDtoById = emailRepository.getMessageDtoById(id);
+
+        if (messageDtoById == null) {
+            throw new IllegalStateException("Message with ID: " + " is not found!");
+        }
+
+        return messageDtoById;
+    }
+
+    public void updateAndSendMessageForAdmin(@NonNull final MessageDTO messageDTO, @NonNull final String adminEmail) {
+        final MessageStatus messageStatus = messageDTO.getMessageStatus();
+        final String id = messageDTO.getId();
+        Objects.requireNonNull(messageStatus);
+        final Message message = findById(id);
+        message.setMessageStatus(messageStatus);
+        message.setSubject(messageDTO.getSubject());
+        message.setBody(messageDTO.getBody());
+
+
+        if (messageStatus == MessageStatus.ALLOWED) {
+            update(message);
+            sendMail(message, adminEmail);
+        } else {
+            Optional.ofNullable(id)
+                            .ifPresent(this::deleteById);
+        }
+
+        LOGGER.info("Message with ID: {} was updated and sent!", id);
     }
 
     public Page<Message> findPaginatedMessages(@NonNull final Pageable pageable, @NonNull final String userId) {
@@ -72,6 +98,7 @@ public class EmailService {
         } else {
             message.setMessageStatus(MessageStatus.UNMODERATED);
             changeMessage(message);
+            LOGGER.info("Message was sent on moderation!");
         }
 
         return message;
