@@ -1,0 +1,151 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criminal Alert</title>
+    <link th:href="@{/css/zeroing.css}" href="../static/css/zeroing.css" rel="stylesheet">
+    <link th:href="@{/css/user-message.css}" href="../static/css/user-message.css" rel="stylesheet">
+    <link th:href="@{/css/header-footer.css}" href="../static/css/header-footer.css" rel="stylesheet">
+</head>
+
+<body>
+<header class="header">
+    <nav class="navigation">
+        <div class="logo-container">
+            <a class="logo-ref" th:href="@{/}">
+                <img class="logo-image" th:src="@{/images/criminalAlertLogo.png}" src="../static/images/criminalAlertLogo.png" alt="logo-criminal-alert">
+                <strong>Criminal Alert</strong>
+            </a>
+        </div>
+        <ul class="menu">
+            <li class="menu-list" id="menu-home">
+                <a class="menu-list-ref" th:href="@{/}">Home</a>
+            </li>
+            <li class="menu-list" id="menu-crimes">
+                <a class="menu-list-ref" th:href="@{/}">Crimes</a>
+            </li>
+            <li class="menu-list" id="menu-mails" sec:authorize="isAuthenticated()">
+                <a class="menu-list-ref" th:href="@{/user/message}">Mails</a>
+            </li>
+            <li class="menu-list" id="menu-contacts" sec:authorize="isAuthenticated()">
+                <a class="menu-list-ref" th:href="@{/}">Contacts</a>
+            </li>
+            <li class="menu-list" id="menu-addresses" sec:authorize="isAuthenticated()">
+                <a class="menu-list-ref" th:href="@{/}">Addresses</a>
+            </li>
+            <li class="menu-list" id="menu-sign-up" sec:authorize="!isAuthenticated()">
+                <a class="menu-list-ref" th:href="@{/user/sign-up}">Sign up</a>
+            </li>
+            <li class="menu-list" id="menu-sign-in" sec:authorize="!isAuthenticated()">
+                <a id="sign-in-button-nav-bar" th:href="@{/sign-in}">Sign in</a>
+            </li>
+            <li class="menu-list" id="menu-admin" sec:authorize="hasAuthority('ADMIN')">
+                <a class="menu-list-ref" th:href="@{/message}">Admin</a>
+            </li>
+            <li class="menu-list" id="menu-sign-out" sec:authorize="isAuthenticated()">
+                <a class="menu-list-ref" th:href="@{/logout}">Sign out</a>
+            </li>
+            <li class="menu-list" id="menu-account" sec:authorize="isAuthenticated()">
+                <a class="menu-list-ref" th:href="@{/}" th:text="${name}"></a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main-container">
+    <section class="main-section-1">
+        <a th:each="message : ${messagePage.content}" th:href="@{/}" class="message-container">
+            <div class="message-id-head" name="message-id-head" title="header of a message id">
+                <span>ID: </span>
+                <span th:text="${message.id}" class="message-id" name="message-id"></span>
+            </div>
+            <div class="message-created-head" name="message-created-head" title="header of a message created">
+                <span>Created: </span>
+                <span th:text="${#temporals.format(message.created, 'dd-MM-yyyy HH:mm')}" class="message-created" name="message-created"></span>
+            </div>
+            <div class="message-updated-head" name="message-updated-head" title="header of a message updated">
+                <span>Updated: </span> 
+                <span th:text="${#temporals.format(message.updated, 'dd-MM-yyyy HH:mm')}" class="message-updated" name="message-updated"></span>
+            </div>
+            <div class="message-status-head" name="message-status-head" title="header of a message status">
+                <span>Message status: </span>
+                <span th:text="${message.messageStatus}" class="message-status" name="message-status"></span>
+            </div>
+            <div class="message-receiver-head" name="message-receiver-head" title="header of a message receiver">
+                <span>Receiver: </span>
+                <span th:text="${message.toEmail}" class="message-receiver" name="message-receiver"></span>
+            </div>
+            <div class="message-subject-head" name="message-subject-head" title="header of a message subject">
+                <span>Subject: </span>
+                <span th:text="${message.subject}" class="message-subject" name="message-subject"></span>
+            </div>
+            <div class="message-crime-type-head" name="message-crime-type-head" title="header of a message crime type">
+                <span>Crime type: </span>
+                <span th:text="${message.crimeType}" class="message-crime-type" name="message-crime-type"></span>
+            </div>
+            <div class="message-body-head" name="message-body-head" title="header of a message body">
+                <span>Message: "</span>
+                <span th:text="${message.body}" class="message-body-type" name="message-body-type"></span>
+                <span>"</span>
+            </div>
+        </a>
+    </section>
+    <div th:if="${messagePage.totalPages > 0}" class="pagination"
+         th:each="pageNumber : ${pageNumbers}">
+        <a th:href="@{/user/message(size=${messagePage.size}, page=${pageNumber})}"
+           th:text=${pageNumber}
+           th:class="${pageNumber==messagePage.number + 1} ? active"></a>
+    </div>
+    <a id="create-message-button" th:href="@{/user/message/create}">+</a>
+</main>
+<footer class="footer">
+    <section class="footer-section-1">
+        <ul class="footer-contacts">
+            <li class="footer-list-contacts" id="footer-contacts-linkedin">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                     viewBox="0,0,256,256" width="24px" height="24px" fill-rule="nonzero">
+                    <g fill="#bfbfbf" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                       stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                       font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                       style="mix-blend-mode: normal">
+                        <g transform="scale(10.66667,10.66667)">
+                            <path
+                                    d="M19,3h-14c-1.105,0 -2,0.895 -2,2v14c0,1.105 0.895,2 2,2h14c1.105,0 2,-0.895 2,-2v-14c0,-1.105 -0.895,-2 -2,-2zM9,17h-2.523v-7h2.523zM7.694,8.717c-0.771,0 -1.286,-0.514 -1.286,-1.2c0,-0.686 0.514,-1.2 1.371,-1.2c0.771,0 1.286,0.514 1.286,1.2c0,0.686 -0.514,1.2 -1.371,1.2zM18,17h-2.442v-3.826c0,-1.058 -0.651,-1.302 -0.895,-1.302c-0.244,0 -1.058,0.163 -1.058,1.302c0,0.163 0,3.826 0,3.826h-2.523v-7h2.523v0.977c0.325,-0.57 0.976,-0.977 2.197,-0.977c1.221,0 2.198,0.977 2.198,3.174z">
+                            </path>
+                        </g>
+                    </g>
+                </svg>
+                <a target="_blank" href="https://www.linkedin.com/in/petro-shulha-7051a2245">LinkedIn</a>
+            </li>
+            <li class="footer-list-contacts" id="footer-contacts-gmail">
+                <img th:src="@{/images/icon-mail.png}" alt="mail-icon">
+                <a target="_blank"
+                   href="https://mail.google.com/mail/?view=cm&fs=1&to=forest23557@gmail.com">Gmail</a>
+            </li>
+            <li class="footer-list-contacts" id="footer-contacts-github">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                     viewBox="0,0,256,256" width="25px" height="25px" fill-rule="nonzero">
+                    <g fill="#bfbfbf" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                       stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                       font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                       style="mix-blend-mode: normal">
+                        <g transform="scale(5.12,5.12)">
+                            <path
+                                    d="M25,8c-9.389,0 -17,7.611 -17,17c0,9.389 7.611,17 17,17c9.389,0 17,-7.611 17,-17c0,-9.389 -7.611,-17 -17,-17zM25,9c8.837,0 16,7.163 16,16c0,7.31591 -4.91495,13.47209 -11.61914,15.37891c-0.13629,-0.20623 -0.23557,-0.44651 -0.22852,-0.72852c0.027,-1.057 0,-3.52078 0,-4.42578c0,-1.553 -0.98242,-2.6543 -0.98242,-2.6543c0,0 7.70898,0.08733 7.70898,-8.13867c0,-3.174 -1.65625,-4.82617 -1.65625,-4.82617c0,0 0.87027,-3.38917 -0.30273,-4.82617c-1.315,-0.142 -3.67078,1.25716 -4.67578,1.91016c0,0 -1.59119,-0.65234 -4.24219,-0.65234c-2.651,0 -4.24414,0.65234 -4.24414,0.65234c-1.006,-0.653 -3.36078,-2.05216 -4.67578,-1.91016c-1.173,1.437 -0.30273,4.82617 -0.30273,4.82617c0,0 -1.6582,1.65022 -1.6582,4.82422c0,8.226 7.70898,8.13867 7.70898,8.13867c0,0 -0.77627,0.87482 -0.94727,2.16211c-0.5318,0.18849 -1.26729,0.41602 -1.96875,0.41602c-1.673,0 -2.94416,-1.62691 -3.41016,-2.37891c-0.46,-0.742 -1.40225,-1.36523 -2.28125,-1.36523c-0.579,0 -0.86328,0.29009 -0.86328,0.62109c0,0.331 0.81166,0.56083 1.34766,1.17383c1.13,1.293 1.10981,4.20313 5.13281,4.20313c0.47416,0 1.32562,-0.10771 2.00781,-0.20117c-0.00441,0.94422 -0.01494,1.86483 0,2.44922c0.00706,0.2824 -0.09192,0.52405 -0.22852,0.73047c-6.70419,-1.90681 -11.61914,-8.063 -11.61914,-15.37891c0,-8.837 7.163,-16 16,-16z">
+                            </path>
+                        </g>
+                    </g>
+                </svg>
+                <a target="_blank"
+                   href="https://github.com/Forest23557/a-level-final-project-criminal-alert">GitHub</a>
+            </li>
+        </ul>
+        <div id="author">© by Petro Shulha</div>
+    </section>
+</footer>
+</body>
+
+</html>

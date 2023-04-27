@@ -1,0 +1,22 @@
+package com.shulha.types;
+
+public enum CrimeTypes {
+    NONE,
+    DOMESTIC_VIOLENCE,
+    KIDNAPPING,
+    BURGLARY,
+    PICKPOCKETING,
+    SEXUAL_ASSAULT,
+    SHOPLIFTING,
+    SMUGGLING,
+    TRESPASSING,
+    ARSON,
+    FRAUD,
+    HOMICIDE,
+    MUGGING,
+    SHOOTING,
+    DRUG_DEALING,
+    MASSACRE,
+    AUTO_THEFT,
+    CHILD_ABUSE
+}

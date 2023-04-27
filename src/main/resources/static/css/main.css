@@ -1,0 +1,75 @@
+@import url(https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
+
+main.main-container {
+	width: 100%;
+}
+
+#danger-image {
+	width: 100%;
+	min-height: calc(100vh - 208px);
+	background: url("../images/boat-danger.jpg") 50%/cover no-repeat;
+	opacity: 0.15;
+}
+
+section.main-section-1 {
+	position: relative;
+}
+
+div.sign-in-container {
+	width: 360px;
+	height: 240px;
+	position: absolute;
+	top: calc(100vh/2 - 224px);
+	left: calc(100vw/2 - 180px);
+	z-index: 50;
+
+	text-align: center;
+}
+
+form.sign-in-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+}
+
+form.sign-in-form input {
+	width: 15rem;
+	margin-bottom: .5rem;
+	border-radius: .4rem;
+	height: 2rem;
+	padding: 0 .5rem;
+}
+
+form.sign-in-form label {
+	font-weight: 600;
+}
+
+button#sign-in-button {
+	width: 15rem;
+	height: 2rem;
+	border-radius: .4rem;
+	color:hsl(0, 0%, 5%);
+	background-color: hsl(0, 0%, 75%);
+	font-size: 14px;
+	font-weight: 500;
+}
+
+button#sign-in-button:hover {
+	background-color: hsl(0, 0%, 55%);
+}
+
+button#sign-in-button:active {
+	background-color: hsl(0, 0%, 35%);
+}
+
+p.sign-up-ref-form {
+	font-size: 14px;
+	margin-top: 2rem;
+}
