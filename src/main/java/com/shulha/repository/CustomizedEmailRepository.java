@@ -28,10 +28,10 @@ public interface CustomizedEmailRepository<T, ID> {
     MessageDTO getMessageDtoById(final String id);
 
     @Query("select m from User u inner join u.messages m where u.id = ?1")
-    Iterable<T> findByUserId(final ID id);
+    List<T> findByUserId(final ID id);
 
     @Query("from Message m where m.messageStatus = ?1")
-    Iterable<T> findByMessageStatus(final MessageStatus messageStatus);
+    List<T> findByMessageStatus(final MessageStatus messageStatus);
 
     @Transactional
     @Modifying

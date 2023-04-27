@@ -60,7 +60,7 @@ public class UserService implements UserDetailsService {
         final User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("User with ID: " + id + " is not found"));
 
-        LOGGER.info("User with ID: " + id + " was found successfully!");
+        LOGGER.info("User with ID: {} was found successfully!", id);
         return user;
     }
 

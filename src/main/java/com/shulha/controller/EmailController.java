@@ -5,6 +5,8 @@ import com.shulha.model.Message;
 import com.shulha.model.User;
 import com.shulha.service.EmailService;
 import com.shulha.types.MessageStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +23,8 @@ import java.util.stream.IntStream;
 @Controller
 @RequestMapping("/message")
 public class EmailController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
 
     private final EmailService emailService;
 
@@ -39,6 +43,9 @@ public class EmailController {
 
         modelAndView.addObject("name", authentication.getName());
         modelAndView.setViewName("message");
+
+        LOGGER.info("User {} got a message page", authentication.getName());
+
         return modelAndView;
     }
 
@@ -49,14 +56,16 @@ public class EmailController {
                                      @RequestParam("id") Optional<String> id,
                                      @RequestParam("page") Optional<Integer> page,
                                      @RequestParam("size") Optional<Integer> size) {
-        System.out.println(messageDTO);
-        final String checkedId = id.orElseThrow(() -> new NullPointerException("Parameter ID should not be null!"));
+
         emailService.updateAndSendMessageForAdmin(messageDTO, authentication.getName());
 
         setPagination(modelAndView, page, size);
 
         modelAndView.addObject("name", authentication.getName());
         modelAndView.setViewName("message");
+
+        LOGGER.info("User {} moderated message", authentication.getName());
+
         return modelAndView;
     }
 
@@ -66,11 +75,13 @@ public class EmailController {
                                                  @RequestParam("id") Optional<String> id) {
         final String checkedId = id.orElseThrow(() -> new NullPointerException("Parameter ID should not be null!"));
         final MessageDTO messageDTOById = emailService.getMessageDTOById(checkedId);
-        System.out.println(messageDTOById);
 
         modelAndView.addObject("name", authentication.getName());
         modelAndView.addObject("message", messageDTOById);
         modelAndView.setViewName("message-moderate");
+
+        LOGGER.info("User {} got a message with ID: {}", authentication.getName(), messageDTOById.getId());
+
         return modelAndView;
     }
 
@@ -83,7 +94,6 @@ public class EmailController {
         final Page<Message> paginatedMessages =
                 emailService.findPaginatedMessagesForAdmin(PageRequest.of(currentPage - 1, pageSize));
 
-        paginatedMessages.get().forEach(System.out::println);
         modelAndView.addObject("messagePage", paginatedMessages);
 
         final int totalPages = paginatedMessages.getTotalPages();

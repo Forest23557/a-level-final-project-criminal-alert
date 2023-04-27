@@ -9,6 +9,7 @@ import com.shulha.types.MessageStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -22,14 +23,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class EmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
-    private static final String POLICE_EMAIL_ADDRESS = "forest23557@gmail.com";
+    @Value("${police.email}")
+    private String policeEmailAddress;
 
     private final JavaMailSender mailSender;
 
@@ -73,17 +73,13 @@ public class EmailService {
     }
 
     public Page<Message> findPaginatedMessages(@NonNull final Pageable pageable, @NonNull final String userId) {
-        final Iterable<Message> messages = findByUserId(userId);
-        final List<Message> messageList = StreamSupport.stream(messages.spliterator(), false)
-                .collect(Collectors.toList());
-        return findPaginated(pageable, messageList);
+        final List<Message> messages = findByUserId(userId);
+        return findPaginated(pageable, messages);
     }
 
     public Page<Message> findPaginatedMessagesForAdmin(@NonNull final Pageable pageable) {
-        final Iterable<Message> messages = emailRepository.findByMessageStatus(MessageStatus.UNMODERATED);
-        final List<Message> messageList = StreamSupport.stream(messages.spliterator(), false)
-                .collect(Collectors.toList());
-        return findPaginated(pageable, messageList);
+        final List<Message> messages = emailRepository.findByMessageStatus(MessageStatus.UNMODERATED);
+        return findPaginated(pageable, messages);
     }
 
     public Message chooseSendOrModerate(@NonNull final Message message, @NonNull final String userEmail) {
@@ -130,7 +126,7 @@ public class EmailService {
         final Optional<Message> message = emailRepository.findById(id);
 
         message.ifPresentOrElse(
-                id1 -> LOGGER.info("Message with ID: {} was found successfully!", id1),
+                message1 -> LOGGER.info("Message with ID: {} was found successfully!", id),
                 () -> LOGGER.info("Message with ID: {} is not found!", id)
         );
 
@@ -144,8 +140,8 @@ public class EmailService {
         return messages;
     }
 
-    public Iterable<Message> findByUserId(@NonNull final String userId) {
-        final Iterable<Message> messages = emailRepository.findByUserId(userId);
+    public List<Message> findByUserId(@NonNull final String userId) {
+        final List<Message> messages = emailRepository.findByUserId(userId);
         LOGGER.info("All user messages whose ID: {} were received!", userId);
         return messages;
     }
@@ -192,7 +188,7 @@ public class EmailService {
 
         final String string = String.format("Type of a crime: %s. %s", crimeType, body);
 
-        message.setToEmail(POLICE_EMAIL_ADDRESS);
+        message.setToEmail(policeEmailAddress);
 
         message.setBody(string);
         LOGGER.info("Message was changed successfully!");
